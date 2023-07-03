@@ -5,17 +5,41 @@
 ## Installation
 
 ```bash
-composer require alucas/iim-td2
+composer require alucas/iim-td3
 ```
-
-## Local development
 
 ```bash
 composer install
 ```
 
+## How to use ? 
+
+```php
+
+use Alucas\td3\Scrapper;
+
+// Initialize the scrapper
+$scrapper = new Scrapper();
+
+// get all characters (pagination, 60 per array)
+$clones = $scrapper->getAllcharacters();
+
+```
+
+##Architercture :
+
+```php
+Class Clone :
+    - name: string
+    - description: string
+    - imageLink: string
+
+```
+
+## Local test & linters :
+
 ```bash
- php vendor/bin/phpstan analyse src --level=max
+php vendor/bin/phpstan analyse src --level=max
 ```
 
 ```bash

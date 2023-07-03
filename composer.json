@@ -14,6 +14,11 @@
             "email": "arthurlucas92@orange.fr"
         }
     ],
+    "require": {
+        "php": ">= 8.0",
+        "symfony/var-dumper": "^4.0||^5.0||^6.0",
+        "symfony/http-client": "^6.3"
+    },
     "require-dev": {
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.2",

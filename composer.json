@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Alucas\\IimTd3\\": "src/"
+            "Alucas\\td3\\": "src/"
         }
     },
     "authors": [

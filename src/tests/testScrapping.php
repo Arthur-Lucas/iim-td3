@@ -3,13 +3,13 @@
 use PHPUnit\Framework\TestCase;
 use Alucas\td3\Scrapper;
 
-class ApiTest extends TestCase
+class ScrapperTest extends TestCase
 {
 
     public function testGetAllNames()
     {
         $scrapper = new Scrapper();
-        $this->assertIsArray($scrapper->getAllNames());
+        $this->assertIsArray($scrapper->getWebPage("https://www.starwars-holonet.com/encyclopedie/liste-personnages-armee-clone-republique.html"));
     }
     // public function testGetRandomNumber()
     // {

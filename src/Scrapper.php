@@ -1,22 +1,28 @@
 <?php
 
+
 declare(strict_types=1);
 
 namespace Alucas\td3;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Scrapper
 {
+    private $httpClient;
 
-    public function __construct(
-        private HttpClientInterface $client,
-    ) {
+    public function __construct()
+    {
+        // Initialisation du client HTTP Symfony HttpClient
+        $this->httpClient = HttpClient::create();
     }
     // Fonction pour envoyer une requête HTTP GET
     public function getWebPage($url): array
     {
-        $response = $this->client->request(
+        $response = $this->httpClient->request(
             'GET',
             $url
         );

@@ -1,0 +1,20 @@
+{
+    "name": "alucas/iim-td3",
+    "description": "Scrap planning lol",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Alucas\\IimTd3\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Arthur",
+            "email": "arthurlucas92@orange.fr"
+        }
+    ],
+    "require-dev": {
+        "phpstan/phpstan": "^1.10"
+    }
+}

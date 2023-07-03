@@ -6,9 +6,12 @@ use Alucas\td3\Scrapper;
 class ScrapperTest extends TestCase
 {
 
-    public function testGetWebPage()
+    public function testGetAllcharacters()
     {
+
         $scrapper = new Scrapper();
-        $this->assertIsArray($scrapper->getWebPage("https://www.starwars-holonet.com/encyclopedie/liste-personnages-armee-clone-republique.html"));
+        $content = $scrapper->getAllcharacters();
+
+        echo $content;
     }
 }

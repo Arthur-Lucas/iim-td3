@@ -26,7 +26,7 @@ $clones = $scrapper->getAllcharacters();
 
 ```
 
-##Architercture :
+## Architercture :
 
 ```php
 Class Clone :

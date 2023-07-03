@@ -7,6 +7,7 @@ namespace Alucas\td3;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -54,22 +55,15 @@ class Scrapper
                 // Obtenir le contenu de la réponse
                 $content = $response->getContent();
 
-                // Créer une instance du Crawler avec le contenu HTML
                 $crawler = new Crawler($content);
 
-                // Sélectionner les éléments HTML contenant les informations des personnages
-                $characterElements = $crawler->filter('.lstv2_nom');
-
-                // Parcourir les éléments et extraire les informations souhaitées
                 $characters = [];
-                $characterElements->each(function (Crawler $element) use (&$characters) {
-                    $name = $element->filter('h2')->text();
-                    // $description = $element->filter('.list_characters_description')->text();
+                // Parcourir les éléments et afficher leur contenu
+                $characters = $crawler->filter('.lstv2_nom')->each(function (Crawler $element) {
 
-                    $characters[] = [
-                        'name' => $name,
-                        // 'description' => $description,
-                    ];
+                    $obj = new stdClass();
+                    $obj->name = $element->text();
+                    return $obj;
                 });
 
                 return $characters;
@@ -82,3 +76,25 @@ class Scrapper
         return null;
     }
 }
+
+                // echo $elements;
+
+                
+
+                // Créer une instance du Crawler avec le contenu HTML
+                // $crawler = new Crawler($content);
+
+                // // Sélectionner les éléments HTML contenant les informations des personnages
+                // $characterElements = $crawler->filter('.lstv2_nom');
+
+                // // Parcourir les éléments et extraire les informations souhaitées
+                // $characters = [];
+                // $characterElements->each(function (Crawler $element) use (&$characters) {
+                //     $name = $element->filter('h2')->text();
+                //     // $description = $element->filter('.list_characters_description')->text();
+
+                //     $characters[] = [
+                //         'name' => $name,
+                //         // 'description' => $description,
+                //     ];
+                // });

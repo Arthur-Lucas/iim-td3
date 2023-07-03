@@ -17,7 +17,9 @@ class Scrapper
     public function __construct()
     {
         // Initialisation du client HTTP Symfony HttpClient
-        $this->httpClient = HttpClient::create();
+        $this->httpClient = HttpClient::create([
+            'verify_peer' => false,
+        ]);
     }
     // Fonction pour envoyer une requête HTTP GET
     public function getWebPage($url): array

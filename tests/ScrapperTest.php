@@ -10,8 +10,6 @@ class ScrapperTest extends TestCase
     {
 
         $scrapper = new Scrapper();
-        $content = $scrapper->getAllcharacters();
-
-        echo $content;
+        $this->assertIsArray($scrapper->getAllcharacters());
     }
 }

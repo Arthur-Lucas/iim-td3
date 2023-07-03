@@ -16,85 +16,69 @@ class Scrapper
 {
     private $httpClient;
 
-    private $url = "https://www.starwars-holonet.com/encyclopedie/liste-personnages-armee-clone-republique.html";
+    private $url;
 
     public function __construct()
     {
+        $this->url = "https://www.starwars-holonet.com/encyclopedie/liste-personnages-armee-clone-republique";
         $this->httpClient = HttpClient::create([
             'verify_peer' => false,
         ]);
-    }
-    public function getWebPage(): string
-    {
-        $response = $this->httpClient->request(
-            'GET',
-            $this->url
-        );
-
-        $statusCode = $response->getStatusCode();
-
-        if($statusCode != 200){
-            throw new \Exception("Error Processing Request", 1);
-        } else {
-            $contentType = $response->getHeaders()['content-type'][0];
-            $content = $response->getContent();
-            return $content;
-        }
-
-        
     }
 
     public function getAllcharacters(): array
     {
         try {
-            // Envoyer une requête GET à l'URL de la page
-            $response = $this->httpClient->request('GET', 'https://www.starwars-holonet.com/encyclopedie/liste-personnages-armee-clone-republique.html');
+            $response = $this->httpClient->request('GET', $this->url . '.html');
+            $characters = [];
+            $pagination = [];
+            $content = $response->getContent();
 
-            // Vérifier le code de statut de la réponse
-            if ($response->getStatusCode() === 200) {
-                // Obtenir le contenu de la réponse
+            $crawler = new Crawler($content);
+
+            array_push($characters, $crawler->filter('.lstv2_element')->each(function (Crawler $element) {
+
+                $clone = new CloneTrooper();
+                $clone->name = $element->filter('.lstv2_nom')->text();
+                $clone->description = $element->filter('.lstv2_intro')->text();
+                $clone->imageLink = $element->filter('.lstv2_image')->filter('img')->attr('src');
+                return $clone;
+            }));
+            
+            $pagination = $crawler->filter('.pagination_conteneur')->filter('.pagination')->each(function (Crawler $element) {
+                if(ctype_digit($element->text())){
+                    return $element->text();
+                }
+                
+            });
+
+            $pagination = array_filter($pagination, function ($value) {
+                return $value !== null;
+            });
+
+            foreach($pagination as $page){
+            
+                $response = $this->httpClient->request('GET', $this->url . '--page-' . $page . '.html');
+
                 $content = $response->getContent();
 
                 $crawler = new Crawler($content);
 
-                $characters = [];
-                // Parcourir les éléments et afficher leur contenu
-                $characters = $crawler->filter('.lstv2_nom')->each(function (Crawler $element) {
+                array_push($characters, $crawler->filter('.lstv2_element')->each(function (Crawler $element) {
 
-                    $obj = new stdClass();
-                    $obj->name = $element->text();
-                    return $obj;
-                });
-
-                return $characters;
+                    $clone = new CloneTrooper();
+                    $clone->name = $element->text();
+                    return $clone;
+                }));
+                
             }
+
+            return $characters;
+            
         } catch (TransportExceptionInterface $e) {
             // Gérer les erreurs de transport HTTP
             echo "Erreur lors de la requête HTTP : " . $e->getMessage();
         }
 
-        return null;
     }
 }
-
-                // echo $elements;
-
-                
-
-                // Créer une instance du Crawler avec le contenu HTML
-                // $crawler = new Crawler($content);
-
-                // // Sélectionner les éléments HTML contenant les informations des personnages
-                // $characterElements = $crawler->filter('.lstv2_nom');
-
-                // // Parcourir les éléments et extraire les informations souhaitées
-                // $characters = [];
-                // $characterElements->each(function (Crawler $element) use (&$characters) {
-                //     $name = $element->filter('h2')->text();
-                //     // $description = $element->filter('.list_characters_description')->text();
-
-                //     $characters[] = [
-                //         'name' => $name,
-                //         // 'description' => $description,
-                //     ];
-                // });
